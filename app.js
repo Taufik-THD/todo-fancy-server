@@ -10,7 +10,7 @@ const usersRouter = require('./routes/users')
 const todosRouter = require('./routes/todo')
 
 const mongoose = require('mongoose')
-mongoose.connect('mongodb://localhost/todo', (req, res)=> {
+mongoose.connect('mongodb://todo-fancy-data:11o22o12@ds231740.mlab.com:31740/todo-fancy', (req, res)=> {
   console.log('database connected!')
 })
 
@@ -29,7 +29,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 app.use('/', indexRouter)
 app.use('/users', usersRouter)
-app.use('/todo', todosRouter) 
+app.use('/todo', todosRouter)
 
 // catch 404 and forward to error handler
 // app.use(function(req, res, next) {

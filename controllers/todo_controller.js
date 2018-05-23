@@ -33,6 +33,7 @@ module.exports = {
   },
 
   addTodo (req, res) {
+
     const token = req.body.token
     const decoded = jwt.decode(token.slice(1, token.length-1))
 
