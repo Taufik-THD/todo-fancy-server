@@ -1,6 +1,6 @@
-const User = require('../models/user');
+const User = require('../models/user')
+const todo = require('../models/todo')
 const jwt = require('jsonwebtoken')
-const mongoose = require('mongoose');
 
 module.exports = {
 
@@ -28,17 +28,10 @@ module.exports = {
 
               } else {
 
+                console.log('adanih login');
+
                 const jwtToken = jwt.sign({ email: req.body.email, id: user._id }, 'MYSUPERSECRET')
-
-                if (user.role == 'admin') {
-
-                  res.status(200).json({ jwtToken, role: 'admin' })
-
-                } else {
-
-                  res.status(200).json({ jwtToken, role: 'user' })
-
-                }
+                res.status(200).json({ jwtToken })
 
               }
 
@@ -60,21 +53,67 @@ module.exports = {
 
   Register(req, res){
 
-    const newUser = {
-      email: req.body.email,
-      password: req.body.password,
-      role: 'user'
-    }
+    User.findOne({ email: req.body.email }, function(err, user) {
 
-    User.create(newUser, function(err, success) {
       if (err) {
         res.status(404).json('bad request')
       } else {
-        res.status(201).json('success add user');
-      }
-      })
 
+        if (user) {
+
+          res.status(404).json('email is already exists')
+
+        } else {
+
+          const newUser = {
+            email: req.body.email,
+            password: req.body.password
+          }
+
+          User.create(newUser, function(err, success) {
+            if (err) {
+              res.status(404).json('bad request')
+            } else {
+              res.status(201).json('success add user');
+            }
+          })
+
+        }
+
+      }
+
+    })
+
+  },
+
+  registerOrLogin (req, res) {
+
+    User.find({ email: req.body.email }, (err, data) => {
+
+      if (data.length > 0) {
+
+        const jwtToken = jwt.sign({ email: data[0].email, id: data[0]._id }, 'MYSUPERSECRET')
+        res.status(200).json({ jwtToken })
+
+      } else {
+
+        const newUser = {
+          email: req.body.email,
+          password: 'asd'
+        }
+
+        User.create(newUser, function(err, success) {
+          if (err) {
+            res.status(404).json('bad request')
+          } else {
+            res.status(201).json('success add user');
+          }
+        })
+
+      }
+
+    })
 
   }
 
-};
+}

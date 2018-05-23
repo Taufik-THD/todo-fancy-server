@@ -2,11 +2,11 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 const bcrypt = require('bcrypt')
 const salt_rounds = 10
+const validator = require('validator');
 
 const userSchema = new Schema({
   email: { type: String, required: true },
-  password: { type: String, required: true },
-  role: { type: String }
+  password: { type: String, required: true }
 },{
   timestamps: true
 })
@@ -44,5 +44,6 @@ userSchema.methods.comparePassword = function(candidatePassword, cb){
 }
 
 const User = mongoose.model('User', userSchema)
+
 
 module.exports = User;

@@ -1,14 +1,17 @@
-var express = require('express');
-var router = express.Router();
-const { Login, Register } = require('../controllers/user_controller');
+const express = require('express');
+const router = express.Router();
+const { Login, Register, Loginfb } = require('../controllers/user_controller');
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
+router.get('/', (req, res) => {
+  console.log('getter');
+})
 
-router.post('/register', Register)
+router.post('/', Login )
 
-router.post('/login', Login)
+router.post('/register', Register )
+
+// router.post('/loginfb', (req, res) => {
+//   console.log('login fb nih');
+// })
 
 module.exports = router;
